@@ -10,22 +10,26 @@ function displayFruits() {
   }
 }
 
+// Function to remove fruit from array
+function removeFruit() {
+  const fruit = fruits.pop();
+  alert(fruit + ' has been removed from the list');
+}
+
 // Welcome the user and ask if they wish to buy
 function welcomeUser() {
   let response = prompt('Welcome, do you wish to buy from us today? (yes/no)');
-  if (response === 'yes') {
-    enterApplication();
-  } else {
-    alert('Thanks for visiting!');
-    return;
-  }
+
+  if (response !== 'yes') return alert('Thanks for visiting!');
+
+  startApplication();
 }
 
 // Main application logic
-function enterApplication() {
+function startApplication() {
   while (true) {
     let action = prompt(
-      "Do you wish to add, display, or quit? (type 'add', 'display', or 'quit')"
+      "Do you wish to add, remove, display or quit? (type 'add', 'remove', 'display', or 'quit')"
     );
 
     if (action === 'add') {
@@ -36,13 +40,17 @@ function enterApplication() {
       } else {
         alert('No fruit entered.');
       }
+    } else if (action == 'remove') {
+      removeFruit();
     } else if (action === 'display') {
       displayFruits();
     } else if (action === 'quit') {
       alert('Thanks for shopping with us today!');
       break;
     } else {
-      alert("Invalid option. Please type 'add', 'display', or 'quit'.");
+      alert(
+        "Invalid option. Please type 'add', 'remove', 'display', or 'quit'."
+      );
     }
   }
 }
