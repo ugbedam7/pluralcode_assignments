@@ -68,9 +68,9 @@ function displayTransaction(e) {
   p.textContent = description.value;
 
   if (transaction_type.value == 'income') {
-    s1.textContent = `Transaction amount: +₦${amount.value}`;
+    s1.innerHTML = `Transaction amount: <span style="color: green;">+₦${amount.value}</span>`;
   } else {
-    s1.textContent = `Transaction amount: -₦${amount.value}`;
+    s1.innerHTML = `Transaction amount: <span style="color: red;">-₦${amount.value}</span>`;
   }
 
   s2.textContent = `Transaction type: ${transaction_type.value}`;
