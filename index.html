@@ -37,17 +37,22 @@
       </div>
       <div class="section3 hide">
         <h2>Add Transaction Form</h2>
-        <form>
+        <form class="form">
           <input
             type="text"
             name="title"
+            id="title"
             placeholder="Enter transaction title"
             required />
           <textarea
             name="description"
             id="description"
             placeholder="Enter transaction description"></textarea>
-          <input type="number" placeholder="Enter transaction amount" />
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            placeholder="Enter transaction amount" />
           <select name="transaction-type" id="transaction-type">
             <option value="income">Income</option>
             <option value="expense">Expense</option>
@@ -66,10 +71,8 @@
       </div>
 
       <div class="section4">
-        <h3>Transaction History</h3>
-        <div class="transactions">
-          <p>You have no transactions</p>
-        </div>
+        <h3 class="history">Transaction History</h3>
+        <div class="transactions"></div>
       </div>
     </div>
     <script src="./script.js"></script>
