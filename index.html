@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Expense Tracker</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="section1">
+        <div class="section1-up">
+          <h3 class="tracker">DO IE-Tracker</h3>
+          <h3 class="version">V.2.0.0</h3>
+        </div>
+        <div class="section1-down">
+          <h3>Toggle Form</h3>
+          <button id="toggle-button" class="green">Open</button>
+        </div>
+      </div>
+
+      <div class="section2">
+        <div class="section2-up">
+          <p>Balance(₦)</p>
+          <h3 class="balance">0</h3>
+        </div>
+        <div class="section2-down">
+          <div class="left">
+            <p>Income(₦)</p>
+            <h3 class="income">0</h3>
+          </div>
+          <div class="right">
+            <p>Expense(₦)</p>
+            <h3 class="expense">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="section3 hide">
+        <h2>Add Transaction Form</h2>
+        <form class="form">
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Enter transaction title" />
+          <textarea
+            name="description"
+            id="description"
+            placeholder="Enter transaction description"></textarea>
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            placeholder="Enter transaction amount" />
+          <select name="transaction-type" id="transaction-type">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select name="transaction-day" id="transaction-day">
+            <option value="Sunday">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+          </select>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      <div class="section4">
+        <h3 class="history">Transaction History</h3>
+        <div class="transactions"></div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
