@@ -2,7 +2,6 @@ const toggleButton = document.getElementById('toggle-button');
 const section3 = document.querySelector('.section3');
 const title = document.querySelector('#title');
 const description = document.querySelector('#description');
-const amount = document.querySelector('#amount');
 const transaction_type = document.querySelector('#transaction-type');
 const transaction_day = document.querySelector('#transaction-day');
 const form = document.querySelector('.form');
@@ -13,12 +12,12 @@ function toggleForm() {
     section3.classList.remove('hide');
     toggleButton.classList.remove('green');
     toggleButton.classList.add('red');
-    toggleButton.innerHTML = 'close';
+    toggleButton.innerHTML = 'Close';
   } else if (toggleButton.classList.contains('red')) {
     toggleButton.classList.remove('red');
     toggleButton.classList.add('green');
     section3.classList.add('hide');
-    toggleButton.innerHTML = 'open';
+    toggleButton.innerHTML = 'Open';
   }
 }
 
@@ -47,6 +46,7 @@ const svg = `<svg stroke="currentColor" fill="currentColor" stroke-width="0" vie
 
 function displayTransaction(e) {
   e.preventDefault();
+
   const outerDiv = document.createElement('div');
   const div = document.createElement('div');
   const h3 = document.createElement('h3');
@@ -67,9 +67,26 @@ function displayTransaction(e) {
   p.classList.add('par');
   p.textContent = description.value;
 
+  const balance = document.querySelector('.balance');
+  const amount = document.querySelector('#amount');
+
   if (transaction_type.value == 'income') {
+    const income = document.querySelector('.income');
+    let initial_value = Number(income.textContent);
+    let in_flow = Number(amount.value);
+    let total = (initial_value += in_flow);
+    income.textContent = `+${total}`;
+    balance.textContent = Number(balance.textContent) + in_flow;
+
     s1.innerHTML = `Transaction amount: <span style="color: green;">+₦${amount.value}</span>`;
   } else {
+    const expense = document.querySelector('.expense');
+    let initial_value = Number(expense.textContent);
+    let deduction = Number(amount.value);
+    let total = (initial_value += deduction);
+    expense.textContent = `-${total}`;
+    balance.textContent = Number(balance.textContent) - deduction;
+
     s1.innerHTML = `Transaction amount: <span style="color: red;">-₦${amount.value}</span>`;
   }
 
@@ -91,7 +108,6 @@ function displayTransaction(e) {
   // });
 
   outerDiv.classList.add('transaction');
-  // div.classList.add('transaction-details');
 
   outerDiv.appendChild(div);
   outerDiv.appendChild(h4);
