@@ -12,12 +12,13 @@ body {
 
 .container {
   width: 25%;
-  margin: 30px auto;
+  margin: 0px auto;
 }
 
 .section1 {
   margin-bottom: 30px;
 }
+
 .section1-up {
   background: #261a49;
   color: #fff;
@@ -142,11 +143,6 @@ form button {
   text-align: center;
 }
 
-.icon:hover {
-  color: red;
-  transition: 2s ease-in-out;
-}
-
 .transaction {
   display: flex;
   justify-content: space-between;
@@ -157,6 +153,10 @@ form button {
 .transaction .icon {
   cursor: pointer;
   font-size: 20px;
+}
+
+.icon:hover {
+  color: red;
 }
 
 .par {

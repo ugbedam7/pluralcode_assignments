@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
       </svg>`;
 
+  let transArr = JSON.parse(localStorage.getItem('transactions')) || [];
+
   const toggleFormVisibility = () => {
     const isGreen = toggleButton.classList.contains('green');
     toggleButton.classList.toggle('green', !isGreen);
@@ -34,30 +36,76 @@ document.addEventListener('DOMContentLoaded', () => {
       day: 'numeric',
       year: 'numeric'
     });
+
     const timeString = now.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
       hour12: true
     });
+
     return `${dateString} | ${timeString}`;
   };
 
-  const updateBalance = (type, amount) => {
-    const value = parseFloat(amount);
-    if (type === 'income') {
-      const newIncome = parseFloat(incomeElement.textContent) + value;
-      incomeElement.textContent = `+${newIncome.toFixed(2)}`;
-      balanceElement.textContent = (
-        parseFloat(balanceElement.textContent) + value
-      ).toFixed(2);
-    } else {
-      const newExpense = parseFloat(expenseElement.textContent) + value;
-      expenseElement.textContent = `-${newExpense.toFixed(2)}`;
-      balanceElement.textContent = (
-        parseFloat(balanceElement.textContent) - value
-      ).toFixed(2);
+  const updateTransanctions = () => {
+    const savedTransactions =
+      JSON.parse(localStorage.getItem('transactions')) || [];
+
+    // Reset balance, income, and expense
+    let income = 0;
+    let expense = 0;
+    let balance = 0;
+
+    // Clear the container before appending
+    transactionsContainer.innerHTML = '';
+
+    // Update balance and render transactions
+    if (savedTransactions.length === 0) {
+      incomeElement.textContent = 0;
+      expenseElement.textContent = 0;
+      balanceElement.textContent = 0;
+      transactionsContainer.innerHTML = `<p style="font-size: 20px">You have no transactions</p>`;
+      return;
     }
+
+    savedTransactions.forEach((trans) => {
+      const { title, description, type, day, amount } = trans;
+      const value = parseFloat(amount);
+      if (type === 'Income') {
+        income += value;
+      } else {
+        expense += value;
+      }
+      balance = income - expense;
+
+      const card = createTransactionCard(title, description, type, day, amount);
+      transactionsContainer.appendChild(card);
+    });
+    // Update the UI
+    incomeElement.textContent = `+${income.toFixed(2)}`;
+    expenseElement.textContent = `-${expense.toFixed(2)}`;
+    balanceElement.textContent = balance.toFixed(2);
+  };
+
+  // const transArr = [];
+  const saveTransaction = (title, description, type, day, amount) => {
+    const transObj = {
+      title,
+      description,
+      type,
+      day,
+      amount
+    };
+
+    const savedTransactions =
+      JSON.parse(localStorage.getItem('transactions')) || [];
+
+    savedTransactions.push(transObj);
+
+    // transArr.push(transObj);
+    console.log(savedTransactions);
+    localStorage.setItem('transactions', JSON.stringify(savedTransactions));
+    transArr = savedTransactions; // Sync transArr with localStorage
   };
 
   const createTransactionCard = (title, description, type, day, amount) => {
@@ -68,17 +116,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteIcon = document.createElement('div');
     deleteIcon.classList.add('icon');
     deleteIcon.innerHTML = svgIcon;
-    deleteIcon.setAttribute('role', 'button');
-    deleteIcon.setAttribute('aria-label', 'Delete transaction');
-    deleteIcon.addEventListener('click', () => transactionCard.remove());
+    deleteIcon.addEventListener('click', () => {
+      const index = transArr.findIndex(
+        (t) => t.title === title && t.day === day
+      );
+      if (index > -1) transArr.splice(index, 1);
+      localStorage.setItem('transactions', JSON.stringify(transArr));
+
+      updateTransanctions();
+
+      transactionCard.remove();
+      console.log(transArr);
+    });
 
     contentDiv.innerHTML = `
         <h3>${title}</h3>
         <p class="par">${description}</p>
         <small>Transaction amount: <span style="color: ${
-          type === 'income' ? 'green' : 'red'
+          type === 'Income' ? 'green' : 'red'
         };">
-          ${type === 'income' ? '+' : '-'}₦${parseFloat(amount).toFixed(
+          ${type === 'Income' ? '+' : '-'}₦${parseFloat(amount).toFixed(
       2
     )}</span></small>
         <small>Transaction type: ${type}</small>
@@ -103,18 +160,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const transactionCard = createTransactionCard(
-      title,
-      description,
-      type,
-      day,
-      amount
-    );
-    transactionsContainer.appendChild(transactionCard);
-    updateBalance(type, amount);
+    if (isNaN(amount) || parseFloat(amount) <= 0) {
+      alert('Please enter a valid positive number for the amount.');
+      return;
+    }
+
+    saveTransaction(title, description, type, day, amount);
+    updateTransanctions();
+
     form.reset();
   };
 
+  // transArr.push(...savedTransactions);
+
   toggleButton.addEventListener('click', toggleFormVisibility);
   form.addEventListener('submit', handleTransactionSubmit);
+  updateTransanctions();
 });

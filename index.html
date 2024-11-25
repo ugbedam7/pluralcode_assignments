@@ -3,12 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple expense tracker to manage your income and expenses effectively." />
+    <meta
+      name="keywords"
+      content="Expense Tracker, Income, Budgeting, Finance Management" />
+    <meta name="author" content="Damian Oguche" />
     <link rel="stylesheet" href="style.css" />
-    <title>Expense Tracker</title>
+    <title>Expense Tracker 2</title>
   </head>
   <body>
     <div class="container">
-      <div class="section1">
+      <!-- Section 1: Header -->
+      <header class="section1">
         <div class="section1-up">
           <h3 class="tracker">DO IE-Tracker</h3>
           <h3 class="version">V.2.0.0</h3>
@@ -17,9 +25,10 @@
           <h3>Toggle Form</h3>
           <button id="toggle-button" class="green">Open</button>
         </div>
-      </div>
+      </header>
 
-      <div class="section2">
+      <!-- Section 2: Balance Summary -->
+      <section class="section2">
         <div class="section2-up">
           <p>Balance(₦)</p>
           <h3 class="balance">0</h3>
@@ -34,8 +43,10 @@
             <h3 class="expense">0</h3>
           </div>
         </div>
-      </div>
-      <div class="section3 hide">
+      </section>
+
+      <!-- Section 3: Add Transaction Form -->
+      <section class="section3 hide">
         <h2>Add Transaction Form</h2>
         <form class="form">
           <input
@@ -53,8 +64,8 @@
             id="amount"
             placeholder="Enter transaction amount" />
           <select name="transaction-type" id="transaction-type">
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
           </select>
           <select name="transaction-day" id="transaction-day">
             <option value="Sunday">Sunday</option>
@@ -67,13 +78,14 @@
           </select>
           <button type="submit">Submit</button>
         </form>
-      </div>
+      </section>
 
-      <div class="section4">
+      <!-- Section 4: Transaction History -->
+      <section class="section4">
         <h3 class="history">Transaction History</h3>
         <div class="transactions"></div>
-      </div>
+      </section>
     </div>
-    <script src="./script.js"></script>
+    <script src="./script.js" defer></script>
   </body>
 </html>
