@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+  /**
+   * Storing references to frequently accessed DOM elements in variables
+   * Improves performance in scripts that manipulate the DOM extensively.
+   * Caching these elements at the beginning of the script or the function and
+   * reusing the cached references(DOM Caching).
+   */
+
   const toggleButton = document.getElementById('toggle-button');
   const section3 = document.querySelector('.section3');
   const titleInput = document.querySelector('#title');
@@ -64,12 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
       incomeElement.textContent = 0;
       expenseElement.textContent = 0;
       balanceElement.textContent = 0;
-      transactionsContainer.innerHTML = `<p style="font-size: 20px">You have no transactions</p>`;
+      transactionsContainer.innerHTML = `<p style="font-size: 18px">You have no transactions</p>`;
       return;
     }
 
     savedTransactions.forEach((trans) => {
-      const { title, description, type, day, amount } = trans;
+      const { id, title, description, type, day, amount } = trans;
       const value = parseFloat(amount);
       if (type === 'Income') {
         income += value;
@@ -78,18 +85,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       balance = income - expense;
 
-      const card = createTransactionCard(title, description, type, day, amount);
+      const card = createTransactionCard(
+        id,
+        title,
+        description,
+        type,
+        day,
+        amount
+      );
       transactionsContainer.appendChild(card);
     });
+
     // Update the UI
     incomeElement.textContent = `+${income.toFixed(2)}`;
     expenseElement.textContent = `-${expense.toFixed(2)}`;
     balanceElement.textContent = balance.toFixed(2);
   };
 
-  // const transArr = [];
   const saveTransaction = (title, description, type, day, amount) => {
     const transObj = {
+      id: `${Date.now()}`,
       title,
       description,
       type,
@@ -101,31 +116,46 @@ document.addEventListener('DOMContentLoaded', () => {
       JSON.parse(localStorage.getItem('transactions')) || [];
 
     savedTransactions.push(transObj);
-
-    // transArr.push(transObj);
-    console.log(savedTransactions);
     localStorage.setItem('transactions', JSON.stringify(savedTransactions));
+
     transArr = savedTransactions; // Sync transArr with localStorage
   };
 
-  const createTransactionCard = (title, description, type, day, amount) => {
+  const createTransactionCard = (id, title, description, type, day, amount) => {
     const transactionCard = document.createElement('div');
     transactionCard.classList.add('transaction');
+    transactionCard.setAttribute('data-id', id);
 
     const contentDiv = document.createElement('div');
     const deleteIcon = document.createElement('div');
     deleteIcon.classList.add('icon');
     deleteIcon.innerHTML = svgIcon;
-    deleteIcon.addEventListener('click', () => {
-      const index = transArr.findIndex(
-        (t) => t.title === title && t.day === day
-      );
+
+    /**
+     * When the createTransactionCard function runs, it creates a transaction card and attaches a click event listener to the delete button.
+     * The event listener on the delete button of the card is triggered wne the
+     * button is clicked
+    * The title and day values for a card are available to the event listener    
+      via closure.
+    * findIndex looks for the transaction with t.title === title && t.day === day
+    * The transaction is removed from the array, and the card is removed from 
+    * the DOM.
+     */
+    deleteIcon.addEventListener('click', (e) => {
+      // Find the parent card
+      const transactionCard = e.target.closest('.transaction');
+      const transactionId = transactionCard.getAttribute('data-id');
+
+      // const index = transArr.findIndex(
+      //   (t) => t.title === title && t.day === day
+      // );
+
+      const index = transArr.findIndex((t) => t.id === transactionId);
       if (index > -1) transArr.splice(index, 1);
       localStorage.setItem('transactions', JSON.stringify(transArr));
+      transactionCard.remove();
 
       updateTransanctions();
-
-      transactionCard.remove();
       console.log(transArr);
     });
 
@@ -167,11 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveTransaction(title, description, type, day, amount);
     updateTransanctions();
-
     form.reset();
   };
-
-  // transArr.push(...savedTransactions);
 
   toggleButton.addEventListener('click', toggleFormVisibility);
   form.addEventListener('submit', handleTransactionSubmit);

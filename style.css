@@ -149,6 +149,7 @@ form button {
   padding: 10px;
   background-color: #fff;
   margin-bottom: 10px;
+  border-radius: 3px;
 }
 .transaction .icon {
   cursor: pointer;

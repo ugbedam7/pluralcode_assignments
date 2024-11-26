@@ -59,15 +59,18 @@
             id="description"
             placeholder="Enter transaction description"></textarea>
           <input
+            step="any"
             type="number"
             name="amount"
             id="amount"
             placeholder="Enter transaction amount" />
           <select name="transaction-type" id="transaction-type">
+            <option value="" disabled selected>Transaction Type</option>
             <option value="Income">Income</option>
             <option value="Expense">Expense</option>
           </select>
           <select name="transaction-day" id="transaction-day">
+            <option value="" disabled selected>Transaction Day</option>
             <option value="Sunday">Sunday</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
