@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     transactionCard.setAttribute('data-id', id);
 
     const contentDiv = document.createElement('div');
+    contentDiv.classList.add('dark');
     const deleteIcon = document.createElement('div');
     deleteIcon.classList.add('icon');
     deleteIcon.innerHTML = svgIcon;
