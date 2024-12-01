@@ -36,20 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const formatDate = () => {
-    const now = new Date();
-    const dateString = now.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-
-    const timeString = now.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true
-    });
+    const dateString = new Date().toDateString();
+    const timeString = new Date().toLocaleTimeString();
 
     return `${dateString} | ${timeString}`;
   };
