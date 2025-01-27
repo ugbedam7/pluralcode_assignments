@@ -8,7 +8,7 @@ const serveFile = (filePath, contentType, res) => {
   fs.readFile(filePath, (err, content) => {
     if (err) {
       res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Server Error');
+      res.end('Internal Server Error');
     } else {
       res.writeHead(200, { 'Content-Type': contentType });
       res.end(content, 'utf-8');
@@ -19,19 +19,21 @@ const serveFile = (filePath, contentType, res) => {
 const server = http.createServer((req, res) => {
   const baseURL = `http://${req.headers.host}/`;
   const reqUrl = new URL(req.url, baseURL);
+
   let filePath = path.join(
     __dirname,
     'public',
     reqUrl.pathname === '/' ? 'index.html' : `${reqUrl.pathname}.html`
   );
+
   const extname = path.extname(filePath);
   const contentType = extname === '.html' ? 'text/html' : 'text/plain';
 
-  fs.exists(filePath, (exists) => {
-    if (exists) {
-      serveFile(filePath, contentType, res);
-    } else {
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
       serveFile(path.join(__dirname, 'public', '404.html'), 'text/html', res);
+    } else {
+      serveFile(filePath, contentType, res);
     }
   });
 });
